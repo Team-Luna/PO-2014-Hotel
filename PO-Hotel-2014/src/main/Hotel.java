@@ -17,8 +17,8 @@ public class Hotel {
 
     public Hotel(int rooms) {
         this.rooms = new ArrayList<>();
-        for (int i = 0; i < rooms ; i++) {
-            Room temp = new Room(i, 0, ("R"+i), new int[]{2});
+        for (int i = 0; i < rooms; i++) {
+            Room temp = new Room(i, 0, ("R" + i), new int[]{2});
             this.rooms.add(temp);
         }
     }
@@ -41,12 +41,43 @@ public class Hotel {
     }
 
     public List<QueryResult> findFreeRooms(Calendar start, Calendar end, int nPersons) {
-        if(end.before(Calendar.getInstance())){
-            List<QueryResult> expResult = new ArrayList<>();
-            return expResult;
+        if (end.before(Calendar.getInstance())) {
+            return new ArrayList<QueryResult>();
         }
+        if (rooms == null || rooms == new ArrayList<Room>()) {
+            return new ArrayList<QueryResult>();
+        }
+        List<QueryResult> ret = new ArrayList<>();
         
-        return null;
+        List<Room> room = new ArrayList<>();
+        room.add(new Room(0, 1, "P0", new int[]{2}));
+        //TODO
+        
+        QueryResult retQuery = new QueryResult(room, (180*(int) daysBetween(start,end)));
+        ret.add(retQuery);
+        
+        return ret;
+    }
+
+    public static long daysBetween(final Calendar startDate, final Calendar endDate) {
+        //assert: startDate must be before endDate  
+        int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
+        long endInstant = endDate.getTimeInMillis();
+        int presumedDays
+                = (int) ((endInstant - startDate.getTimeInMillis()) / MILLIS_IN_DAY);
+        Calendar cursor = (Calendar) startDate.clone();
+        cursor.add(Calendar.DAY_OF_YEAR, presumedDays);
+        long instant = cursor.getTimeInMillis();
+        if (instant == endInstant) {
+            return presumedDays;
+        }
+
+        final int step = instant < endInstant ? 1 : -1;
+        do {
+            cursor.add(Calendar.DAY_OF_MONTH, step);
+            presumedDays += step;
+        } while (cursor.getTimeInMillis() <= endInstant);
+        return presumedDays;
     }
 
 }
