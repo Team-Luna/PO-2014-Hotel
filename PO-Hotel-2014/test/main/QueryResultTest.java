@@ -18,9 +18,9 @@ import static org.junit.Assert.*;
  *
  * @author student
  */
-public class QueryResutsTest {
+public class QueryResultTest {
     
-    public QueryResutsTest() {
+    public QueryResultTest() {
     }
     
     @BeforeClass
@@ -45,7 +45,7 @@ public class QueryResutsTest {
     @Test
     public void testRooms() {
         System.out.println("rooms");
-        QueryResuts instance = new QueryResuts();
+        QueryResult instance = new QueryResult();
         List<Room> expResult = null;
         List<Room> result = instance.rooms();
         assertEquals(expResult, result);
@@ -59,7 +59,7 @@ public class QueryResutsTest {
     @Test
     public void testPrice() {
         System.out.println("price");
-        QueryResuts instance = new QueryResuts();
+        QueryResult instance = new QueryResult();
         int expResult = 0;
         int result = instance.price();
         assertEquals(expResult, result);
