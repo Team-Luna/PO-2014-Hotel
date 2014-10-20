@@ -7,7 +7,7 @@ public class Room {
     private int ID;
     private int floor;
     private String roomID;
-    private short[][] beds;
+    private int[] beds;
 
     public Room() {
         this.ID = -1;
@@ -16,11 +16,23 @@ public class Room {
         this.beds = null;
     }
 
-    public Room(int ID, int floor, String roomID, short[][] beds) {
+    public Room(int ID, int floor, String roomID, int[] beds) {
         this.ID = ID;
         this.roomID = roomID;
         this.floor = floor;
         this.beds = beds;
+    }
+    
+    public String name(){
+        return roomID;
+    }
+    
+    public int nPersons(){
+        int temp=0;
+        for(int i=0;i<beds.length;i++){
+            temp+=beds[i];
+        }
+        return temp;
     }
 
     public int getFloor() {
@@ -39,11 +51,11 @@ public class Room {
         this.ID = ID;
     }
 
-    public short[][] getBeds() {
+    public int[] getBeds() {
         return beds;
     }
 
-    public void setBeds(short[][] beds) {
+    public void setBeds(int[] beds) {
         this.beds = beds;
     }
 

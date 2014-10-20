@@ -98,8 +98,8 @@ public class RoomTest {
     public void testGetBeds() {
         System.out.println("getBeds");
         Room instance = new Room();
-        short[][] expResult = null;
-        short[][] result = instance.getBeds();
+        int[] expResult = null;
+        int[] result = instance.getBeds();
         assertArrayEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -111,7 +111,7 @@ public class RoomTest {
     @Test
     public void testSetBeds() {
         System.out.println("setBeds");
-        short[][] beds = null;
+        int[] beds = null;
         Room instance = new Room();
         instance.setBeds(beds);
         // TODO review the generated test code and remove the default call to fail.
