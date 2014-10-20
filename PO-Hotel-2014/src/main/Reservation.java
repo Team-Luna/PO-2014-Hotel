@@ -8,10 +8,7 @@ import java.util.Date;
  */
 public class Reservation {
     private Room[] roomList;
-    private String customerFirstName;
-    private String customerSurName;
-    private String customerEmail;
-    private String customerAddress;
+    private Person customer;
     private Date startingDate;
     private Date endDate;
 
@@ -26,20 +23,14 @@ public class Reservation {
         cal.set(Calendar.HOUR_OF_DAY, 10);
         this.endDate = cal.getTime();
         this.roomList = null;
-        this.customerFirstName = "";
-        this.customerSurName = "";
-        this.customerEmail = "";
-        this.customerAddress = "";
+        customer = null;
     }
 
     public Reservation(String customerFirstName, String customerSurName, String customerEmail, String customerAddress, Date startingDate, Date endDate, Room[] roomList) {
         this.startingDate = startingDate;
         this.endDate = endDate;
         this.roomList = roomList;
-        this.customerFirstName = customerFirstName;
-        this.customerSurName = customerSurName;
-        this.customerEmail = customerEmail;
-        this.customerAddress = customerAddress;
+        this.customer = new Person(customerFirstName, customerSurName, customerEmail, customerAddress);
     }
 
     public Room[] getRoomList() {
@@ -50,36 +41,28 @@ public class Reservation {
         this.roomList = roomList;
     }
 
-    public String getCustomerFirstName() {
-        return customerFirstName;
+    public String getCustomerName() {
+        return customer.getName();
     }
 
-    public void setCustomerFirstName(String customerFirstName) {
-        this.customerFirstName = customerFirstName;
-    }
-
-    public String getCustomerSurName() {
-        return customerSurName;
-    }
-
-    public void setCustomerSurName(String customerSurName) {
-        this.customerSurName = customerSurName;
+    public void setCustomerName(String customerFirstName, String customerLastName) {
+        this.customer.setName(customerFirstName, customerLastName);
     }
 
     public String getCustomerEmail() {
-        return customerEmail;
+        return customer.getEmail();
     }
 
     public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+        this.customer.setEmail(customerEmail);
     }
 
     public String getCustomerAddress() {
-        return customerAddress;
+        return customer.getAddress();
     }
 
     public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
+        this.customer.setAddress(customerAddress);
     }
 
     public Date getStartingDate() {

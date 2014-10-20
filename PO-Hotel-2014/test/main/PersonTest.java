@@ -59,7 +59,7 @@ public class PersonTest {
         String FirstName = "";
         String LastName = "";
         Person instance = new Person();
-        instance.SetName(FirstName, LastName);
+        instance.setName(FirstName, LastName);
     }
     
 }

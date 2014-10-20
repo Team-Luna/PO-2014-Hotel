@@ -66,55 +66,29 @@ public class ReservationTest {
     }
 
     /**
-     * Test of getCustomerFirstName method, of class Reservation.
+     * Test of getCustomerName method, of class Reservation.
      */
     @Test
-    public void testGetCustomerFirstName() {
-        System.out.println("getCustomerFirstName");
+    public void testGetCustomerName() {
+        System.out.println("getCustomerName");
         Reservation instance = new Reservation();
         String expResult = "";
-        String result = instance.getCustomerFirstName();
+        String result = instance.getCustomerName();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of setCustomerFirstName method, of class Reservation.
+     * Test of setCustomerName method, of class Reservation.
      */
     @Test
-    public void testSetCustomerFirstName() {
-        System.out.println("setCustomerFirstName");
+    public void testSetCustomerName() {
+        System.out.println("setCustomerName");
         String customerFirstName = "";
+        String customerLastName = "";
         Reservation instance = new Reservation();
-        instance.setCustomerFirstName(customerFirstName);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCustomerSurName method, of class Reservation.
-     */
-    @Test
-    public void testGetCustomerSurName() {
-        System.out.println("getCustomerSurName");
-        Reservation instance = new Reservation();
-        String expResult = "";
-        String result = instance.getCustomerSurName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setCustomerSurName method, of class Reservation.
-     */
-    @Test
-    public void testSetCustomerSurName() {
-        System.out.println("setCustomerSurName");
-        String customerSurName = "";
-        Reservation instance = new Reservation();
-        instance.setCustomerSurName(customerSurName);
+        instance.setCustomerName(customerFirstName, customerLastName);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

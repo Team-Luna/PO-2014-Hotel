@@ -13,13 +13,43 @@ package main;
 public class Person {
     private String FirstName;
     private String LastName;
+    private String Email;
+    private String Address;
     
     public String getName(){
-        return this.FirstName+" "+this.LastName;
+        return FirstName+" "+this.LastName;
     }
     
-    public void SetName(String FirstName, String LastName){
+    public String getEmail(){
+        return Email;
+    }
+    
+    public String getAddress(){
+        return Address;
+    }
+    
+    public void setName(String FirstName, String LastName){
         this.FirstName=FirstName;
         this.LastName=LastName;
+    }
+    
+    public void setEmail(String Email){
+        this.Email=Email;
+    }
+    
+    public void setAddress(String Address){
+        this.Address=Address;
+    }
+    
+    public Person(){
+        setName("","");
+        setEmail("");
+        setAddress("");
+    }
+    
+    public Person(String FirstName, String LastName, String Email, String Address){
+        setName(FirstName,LastName);
+        setEmail(Email);
+        setAddress(Address);
     }
 }
