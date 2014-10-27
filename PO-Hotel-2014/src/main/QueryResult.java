@@ -32,4 +32,24 @@ class QueryResult {
 
         return this.price;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != QueryResult.class){
+            return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+        }else{
+            QueryResult temp = (QueryResult) obj;
+            if(temp.price() != price()){
+                return false;
+            }
+            boolean check = true;
+            for(int i=0; i<rooms.size(); i++){
+                if(!(rooms.get(i).equals(temp.rooms.get(i)))){
+                    check = false; 
+                }
+            }
+            return check;
+        }
+    }
+    
 }

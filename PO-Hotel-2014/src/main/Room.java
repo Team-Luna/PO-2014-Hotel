@@ -1,5 +1,7 @@
 package main;
 
+import java.util.stream.IntStream;
+
 /**
  * Created by K O M P U T E R on 2014-10-06.
  */
@@ -66,4 +68,35 @@ public class Room {
     public void setRoomID(String roomID) {
         this.roomID = roomID;
     }
+    
+    public int getCapacity(){
+        return IntStream.of(beds).sum();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != Room.class){
+            return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+        }else{
+            Room temp = (Room) obj;
+            if(temp.getID() != getID()){
+                return false;
+            }
+            if(temp.getFloor()!= getFloor()){
+                return false;
+            }
+            if(!temp.getRoomID().equals(getRoomID())){
+                return false;
+            }
+            boolean check = true;
+            int[] tempB = temp.getBeds();
+            for(int i=0; i<beds.length; i++){
+                if(beds[i]!=tempB[i]){
+                    check = false; 
+                }
+            }
+            return check;
+        }
+    }
+    
 }

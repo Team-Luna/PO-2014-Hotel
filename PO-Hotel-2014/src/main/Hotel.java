@@ -22,6 +22,15 @@ public class Hotel {
             this.rooms.add(temp);
         }
     }
+    
+    public Hotel(int rooms, int[][] beds) {
+        this.rooms = new ArrayList<>();
+        int pointer = 0;
+        for (int i = 0; i < rooms; i++) {
+            Room temp = new Room(i, 0, ("R" + i), beds[pointer++]);
+            this.rooms.add(temp);
+        }
+    }
 
     /**
      * @param args Starting parameter
@@ -49,11 +58,9 @@ public class Hotel {
         }
         List<QueryResult> ret = new ArrayList<>();
         
-        List<Room> room = new ArrayList<>();
-        room.add(new Room(0, 1, "P0", new int[]{2}));
-        //TODO
+        List<Room> rooms = getRooms(nPersons);
         
-        QueryResult retQuery = new QueryResult(room, (180*(int) daysBetween(start,end)));
+        QueryResult retQuery = new QueryResult(rooms, (180*(int) daysBetween(start,end)));
         ret.add(retQuery);
         
         return ret;
@@ -78,6 +85,18 @@ public class Hotel {
             presumedDays += step;
         } while (cursor.getTimeInMillis() <= endInstant);
         return presumedDays;
+    }
+
+    private List<Room> getRooms(int nPersons) {
+        List<Room> rooms = new ArrayList<>();
+        for(Room room : this.rooms){
+            if(room.getCapacity() == nPersons){
+                rooms.add(room);
+                break;
+            }
+        }
+        
+        return rooms;
     }
 
 }

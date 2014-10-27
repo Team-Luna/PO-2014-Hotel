@@ -109,10 +109,10 @@ public class HotelTest {
         end.set(2016, 10, 12);
         int nPersons = 2;
         
-        Hotel instance = new Hotel(1);
+        Hotel instance = new Hotel(1, new int[][]{new int[]{2}});
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(0, 1, "P0", new int[]{2}));
+        room.add(new Room(0, 0, "R0", new int[]{2}));
         QueryResult expQuery = new QueryResult(room, 180*2);
         expResult.add(expQuery);
         
