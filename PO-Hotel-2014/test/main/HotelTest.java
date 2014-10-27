@@ -81,7 +81,7 @@ public class HotelTest {
     }
 
     /**
-     * Test of findFreeRooms method, of class Hotel.
+     * Test of findFreeRooms method, of class Hotel. With no free rooms.
      */
     @Test
     public void testFindNoRooms() {
@@ -98,7 +98,7 @@ public class HotelTest {
     }
     
     /**
-     * Test of findFreeRooms method, of class Hotel.
+     * Test of findFreeRooms method, of class Hotel. With a single free room.
      */
     @Test
     public void testFindDoubleRoom() {
@@ -110,6 +110,30 @@ public class HotelTest {
         int nPersons = 2;
         
         Hotel instance = new Hotel(1, new int[][]{new int[]{2}});
+        List<QueryResult> expResult = new ArrayList<>();
+        List<Room> room = new ArrayList<>();
+        room.add(new Room(0, 0, "R0", new int[]{2}));
+        QueryResult expQuery = new QueryResult(room, 180*2);
+        expResult.add(expQuery);
+        
+        List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of findFreeRooms method, of class Hotel. With finding a cheapest room.
+     */
+    @Test
+    public void testFindCheapestRoom() {
+        System.out.println("findFreeRooms");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        start.set(2016, 10, 10);
+        end.set(2016, 10, 12);
+        int nPersons = 3;
+        
+        Hotel instance = new Hotel(3, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        //TODO Costs
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
         room.add(new Room(0, 0, "R0", new int[]{2}));
