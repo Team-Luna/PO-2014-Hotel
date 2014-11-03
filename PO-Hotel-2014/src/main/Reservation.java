@@ -23,7 +23,7 @@ public class Reservation {
         cal.set(Calendar.HOUR_OF_DAY, 10);
         this.endDate = cal.getTime();
         this.roomList = null;
-        customer = null;
+        this.customer = null;
     }
 
     public Reservation(String customerFirstName, String customerSurName, String customerEmail, String customerAddress, Date startingDate, Date endDate, Room[] roomList) {
