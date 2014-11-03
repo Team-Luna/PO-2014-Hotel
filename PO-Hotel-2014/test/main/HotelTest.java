@@ -182,8 +182,14 @@ public class HotelTest {
     @Test
     public void testReserve() {
         System.out.println("reserve");
+        
+        Person person = new Person();
+        Calendar start = Calendar.getInstance(), end = Calendar.getInstance();
+        QueryResult qres = new QueryResult();
+        
+        
         Hotel instance = new Hotel();
-        instance.reserve(null, null, null, null);
+        instance.reserve(start, end, qres, person);
         
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
