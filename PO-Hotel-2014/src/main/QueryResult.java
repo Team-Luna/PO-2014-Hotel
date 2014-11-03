@@ -5,6 +5,8 @@
  */
 package main;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -17,11 +19,18 @@ class QueryResult {
     private int price;
 
     public QueryResult() {
+        this.rooms = new ArrayList<>();
+        this.price = 0;
     }
 
     public QueryResult(List<Room> rooms, int price) {
         this.rooms = rooms;
         this.price = price;
+    }
+    
+    public QueryResult(List<Room> rooms) {
+        this.rooms = rooms;
+        this.price = 0;
     }
 
     public List<Room> rooms() {
@@ -29,7 +38,6 @@ class QueryResult {
     }
 
     public int price() {
-
         return this.price;
     }
 

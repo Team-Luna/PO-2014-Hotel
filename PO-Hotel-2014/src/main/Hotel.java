@@ -9,7 +9,8 @@ import java.util.List;
  */
 public class Hotel {
 
-    public List<Room> rooms;
+    private List<Room> rooms;
+    private List<Room> tempRooms;
 
     public Hotel() {
         // TODO Auto-generated constructor stub
@@ -22,7 +23,7 @@ public class Hotel {
             this.rooms.add(temp);
         }
     }
-    
+
     public Hotel(int rooms, int[][] beds) {
         this.rooms = new ArrayList<>();
         int pointer = 0;
@@ -57,12 +58,39 @@ public class Hotel {
             return new ArrayList<QueryResult>();
         }
         List<QueryResult> ret = new ArrayList<>();
-        
-        List<Room> rooms = getRooms(nPersons);
-        
-        QueryResult retQuery = new QueryResult(rooms, (180*(int) daysBetween(start,end)));
-        ret.add(retQuery);
-        
+        tempRooms = new ArrayList<>();
+        tempRooms = rooms;
+
+        for (int a = 0; a < 3; a++) {
+
+            List<Room> proposedRooms = getRooms(nPersons);
+
+            int price = 0;
+            for (Room r : proposedRooms) {
+                //TODO Seasons
+                switch (r.getCapacity()) {
+                    case 1:
+                        price += (120 * (int) daysBetween(start, end));
+                        break;
+                    case 2:
+                        price += (180 * (int) daysBetween(start, end));
+                        break;
+                    case 4:
+                        price += (300 * (int) daysBetween(start, end));
+                        break;
+                    default:
+                        price += 0;
+                        break;
+                }
+            }
+
+            if (proposedRooms.isEmpty()) {
+                break;
+            }
+
+            QueryResult retQuery = new QueryResult(proposedRooms, price);
+            ret.add(retQuery);
+        }
         return ret;
     }
 
@@ -89,13 +117,15 @@ public class Hotel {
 
     private List<Room> getRooms(int nPersons) {
         List<Room> rooms = new ArrayList<>();
-        for(Room room : this.rooms){
-            if(room.getCapacity() == nPersons){
+        //Easy Variant
+        for (Room room : tempRooms) {
+            int i = room.getCapacity();
+            if (room.getCapacity() >= nPersons) {
                 rooms.add(room);
+                tempRooms.remove(room);
                 break;
             }
         }
-        
         return rooms;
     }
 
