@@ -1,45 +1,47 @@
 package main;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by K O M P U T E R on 2014-10-06.
  */
 public class Reservation {
-    private Room[] roomList;
+    private QueryResult res;
     private Person customer;
-    private Date startingDate;
-    private Date endDate;
+    private Calendar startingDate;
+    private Calendar endDate;
 
     public Reservation() {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(), cal1 = Calendar.getInstance();
         cal.set(Calendar.YEAR, 1990);
         cal.set(Calendar.MONTH, 1);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.HOUR_OF_DAY, 14);
-        this.startingDate = cal.getTime();
-        cal.set(Calendar.DAY_OF_MONTH, 2);
-        cal.set(Calendar.HOUR_OF_DAY, 10);
-        this.endDate = cal.getTime();
-        this.roomList = null;
+        this.startingDate = cal;
+        cal1.set(Calendar.YEAR, 1990);
+        cal1.set(Calendar.MONTH, 1);
+        cal1.set(Calendar.DAY_OF_MONTH, 2);
+        cal1.set(Calendar.HOUR_OF_DAY, 10);
+        this.endDate = cal1;
+        this.res = null;
         this.customer = null;
     }
 
-    public Reservation(String customerFirstName, String customerSurName, String customerEmail, String customerAddress, Date startingDate, Date endDate, Room[] roomList) {
+    public Reservation(Calendar startingDate, Calendar endDate, QueryResult result, Person person) {
         this.startingDate = startingDate;
         this.endDate = endDate;
-        this.roomList = roomList;
-        this.customer = new Person(customerFirstName, customerSurName, customerEmail, customerAddress);
+        this.res = result;
+        this.customer = person;
     }
 
-    public Room[] getRoomList() {
-        return roomList;
+    public List<Room> getRoomList() {
+        return res.rooms();
     }
 
-    public void setRoomList(Room[] roomList) {
+   /* public void setRoomList(Room[] roomList) {
         this.roomList = roomList;
-    }
+    }*/
 
     public String getCustomerName() {
         return customer.getName();
@@ -65,19 +67,19 @@ public class Reservation {
         this.customer.setAddress(customerAddress);
     }
 
-    public Date getStartingDate() {
+    public Calendar getStartingDate() {
         return startingDate;
     }
 
-    public void setStartingDate(Date startingDate) {
+    public void setStartingDate(Calendar startingDate) {
         this.startingDate = startingDate;
     }
 
-    public Date getEndDate() {
+    public Calendar getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
     }
 }
