@@ -132,7 +132,7 @@ public class Hotel {
         return rooms;
     }
     
-    private void reserve(Calendar start, Calendar end, QueryResult result, Person person){
+    public void reserve(Calendar start, Calendar end, QueryResult result, Person person){
            Reservation newRes = new Reservation(start, end, result, person);
            this.reservation.add(newRes);
     }

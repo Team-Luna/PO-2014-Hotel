@@ -143,4 +143,49 @@ public class HotelTest {
         List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of findFreeRooms method, of class Hotel.
+     */
+    @Test
+    public void testFindFreeRooms() {
+        System.out.println("findFreeRooms");
+        Calendar start = null;
+        Calendar end = null;
+        int nPersons = 0;
+        Hotel instance = new Hotel();
+        List<QueryResult> expResult = null;
+        List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of daysBetween method, of class Hotel.
+     */
+    @Test
+    public void testDaysBetween() {
+        System.out.println("daysBetween");
+        Calendar startDate = null;
+        Calendar endDate = null;
+        long expResult = 0L;
+        long result = Hotel.daysBetween(startDate, endDate);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+    /**
+     * Test of daysBetween method, of class Hotel.
+     */
+    @Test
+    public void testReserve() {
+        System.out.println("reserve");
+        Hotel instance = new Hotel();
+        instance.reserve(null, null, null, null);
+        
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 }
