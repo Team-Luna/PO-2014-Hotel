@@ -12,6 +12,7 @@ public class Hotel {
     private List<Room> rooms;
     private List<Room> tempRooms;
     private List<Reservation> reservation;
+    private IniReader reader = new IniReader();
 
     public Hotel() {
         this.reservation = new ArrayList<>();
@@ -70,21 +71,7 @@ public class Hotel {
 
             int price = 0;
             for (Room r : proposedRooms) {
-                //TODO Seasons
-                switch (r.getCapacity()) {
-                    case 1:
-                        price += (120 * (int) daysBetween(start, end));
-                        break;
-                    case 2:
-                        price += (180 * (int) daysBetween(start, end));
-                        break;
-                    case 4:
-                        price += (300 * (int) daysBetween(start, end));
-                        break;
-                    default:
-                        price += 0;
-                        break;
-                }
+                price += getRoomPrice(r, start, end);
             }
 
             if (proposedRooms.isEmpty()) {
@@ -122,7 +109,6 @@ public class Hotel {
         List<Room> rooms = new ArrayList<>();
         //Easy Variant
         for (Room room : tempRooms) {
-            int i = room.getCapacity();
             if (room.getCapacity() >= nPersons) {
                 rooms.add(room);
                 tempRooms.remove(room);
@@ -131,10 +117,37 @@ public class Hotel {
         }
         return rooms;
     }
-    
-    public void reserve(Calendar start, Calendar end, QueryResult result, Person person){
-           Reservation newRes = new Reservation(start, end, result, person);
-           this.reservation.add(newRes);
+
+    public void reserve(Calendar start, Calendar end, QueryResult result, Person person) {
+        Reservation newRes = new Reservation(start, end, result, person);
+        this.reservation.add(newRes);
+    }
+
+    private int getRoomPrice(Room r, Calendar start, Calendar end) {
+        Calendar seasonStart = reader.getSeasonStart();
+        Calendar seasonEnd = reader.getSeasonEnd();
+        double mult = reader.getSeasonMulti();
+        int price = 0;
+
+        switch (r.getCapacity()) {
+            case 1:
+                for (int i = 0; i < (int) daysBetween(start, end); i++) {
+                    price += 130;
+                    //TODO
+                    break;
+                }
+            case 2:
+                price += (180 * (int) daysBetween(start, end));
+                break;
+            case 4:
+                price += (300 * (int) daysBetween(start, end));
+                break;
+            default:
+                price += 0;
+                break;
+        }
+
+        return price;
     }
 
 }

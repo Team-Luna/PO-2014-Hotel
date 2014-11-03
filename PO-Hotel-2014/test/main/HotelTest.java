@@ -41,18 +41,6 @@ public class HotelTest {
     }
 
     /**
-     * Test of main method, of class Hotel.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        Hotel.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of add method, of class Hotel.
      */
     @Test
@@ -145,35 +133,16 @@ public class HotelTest {
     }
 
     /**
-     * Test of findFreeRooms method, of class Hotel.
-     */
-    @Test
-    public void testFindFreeRooms() {
-        System.out.println("findFreeRooms");
-        Calendar start = null;
-        Calendar end = null;
-        int nPersons = 0;
-        Hotel instance = new Hotel();
-        List<QueryResult> expResult = null;
-        List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of daysBetween method, of class Hotel.
      */
     @Test
     public void testDaysBetween() {
         System.out.println("daysBetween");
-        Calendar startDate = null;
-        Calendar endDate = null;
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
         long expResult = 0L;
         long result = Hotel.daysBetween(startDate, endDate);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
     /**
