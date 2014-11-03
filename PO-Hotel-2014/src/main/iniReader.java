@@ -24,23 +24,24 @@ public final class iniReader {
     }
     
     public Calendar getSeasonStart(){
-        p.getProperty("SeasonStart");
-        //TODO
-        return null;
-        
+        String month = p.getProperty("SeasonStartMonth");
+        String day = p.getProperty("SeasonStartDay");
+        Calendar start = Calendar.getInstance();
+        start.set(Calendar.MONTH, Integer.parseInt(month));
+        start.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+        return start;
     }
     
     public Calendar getSeasonEnd(){
-        p.getProperty("SeasonEnd");
-        //TODO
-        return null;
-        
+        String month = p.getProperty("SeasonEndMonth");
+        String day = p.getProperty("SeasonEndDay");
+        Calendar start = Calendar.getInstance();
+        start.set(Calendar.MONTH, Integer.parseInt(month));
+        start.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+        return start;
     }
     
-    public Calendar getSeasonMulti(){
-        p.getProperty("SeasonMultiplyer");
-        //TODO
-        return null;
-        
+    public double getSeasonMulti(){
+        return Double.parseDouble(p.getProperty("SeasonMultiplyer"));
     }
 }
