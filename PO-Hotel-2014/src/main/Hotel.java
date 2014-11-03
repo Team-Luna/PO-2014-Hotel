@@ -10,12 +10,14 @@ import java.util.List;
 public class Hotel {
 
     public List<Room> rooms;
+    private List<Reservation> reservation;
 
     public Hotel() {
-        // TODO Auto-generated constructor stub
+        this.reservation = new ArrayList<>();
     }
 
     public Hotel(int rooms) {
+        this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
         for (int i = 0; i < rooms; i++) {
             Room temp = new Room(i, 0, ("R" + i), new int[]{2});
@@ -24,6 +26,7 @@ public class Hotel {
     }
     
     public Hotel(int rooms, int[][] beds) {
+        this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
         int pointer = 0;
         for (int i = 0; i < rooms; i++) {
@@ -97,6 +100,11 @@ public class Hotel {
         }
         
         return rooms;
+    }
+    
+    private void reserve(Calendar start, Calendar end, QueryResult result, Person person){
+           Reservation newRes = new Reservation(start, end, result, person);
+           this.reservation.add(newRes);
     }
 
 }
