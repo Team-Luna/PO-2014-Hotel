@@ -2,7 +2,10 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by K O M P U T E R on 2014-10-06.
@@ -12,7 +15,7 @@ public class Hotel {
     private List<Room> rooms;
     private List<Room> tempRooms;
     private List<Reservation> reservation;
-    private IniReader reader = new IniReader();
+    private ConfigReader reader = new ConfigReader();
 
     public Hotel() {
         this.reservation = new ArrayList<>();
@@ -62,21 +65,21 @@ public class Hotel {
             return new ArrayList<QueryResult>();
         }
         List<QueryResult> ret = new ArrayList<>();
-        tempRooms = new ArrayList<>();
-        tempRooms = rooms;
+        tempRooms = new ArrayList<Room>(rooms);
 
         for (int a = 0; a < 3; a++) {
 
             List<Room> proposedRooms = getRooms(nPersons);
-
-            int price = 0;
-            for (Room r : proposedRooms) {
-                price += getRoomPrice(r, start, end);
-            }
-
             if (proposedRooms.isEmpty()) {
                 break;
             }
+            //System.out.println("Loop: "+a);
+            int price = 0;
+            for (Room r : proposedRooms) {
+                //System.out.println("Room: "+r.name()+"|"+r.getCapacity());
+                price += getRoomPrice(r, start, end);
+            }
+            //System.out.println("Price: "+price);
 
             QueryResult retQuery = new QueryResult(proposedRooms, price);
             ret.add(retQuery);
@@ -108,14 +111,34 @@ public class Hotel {
     private List<Room> getRooms(int nPersons) {
         List<Room> rooms = new ArrayList<>();
         //Easy Variant
+        /*
+         for (Room room : tempRooms) {
+         if (room.getCapacity() >= nPersons) {
+         rooms.add(room);
+         tempRooms.remove(room);
+         break;
+         }
+         }*/
+        //Hard Variant
+        Collections.sort(tempRooms, Collections.reverseOrder());
+        int assignedCapacity = 0;
         for (Room room : tempRooms) {
-            if (room.getCapacity() >= nPersons) {
-                rooms.add(room);
-                tempRooms.remove(room);
+            assignedCapacity += room.getCapacity();
+            rooms.add(room);
+            //tempRooms.remove(room);
+
+            if (assignedCapacity >= nPersons) {
                 break;
             }
         }
-        return rooms;
+        for (Room room : rooms) {
+            tempRooms.remove(room);
+        }
+        //return rooms;
+        if (assignedCapacity >= nPersons) {
+            return rooms;
+        }
+        return new ArrayList<>();
     }
 
     public void reserve(Calendar start, Calendar end, QueryResult result, Person person) {
@@ -124,27 +147,13 @@ public class Hotel {
     }
 
     private int getRoomPrice(Room r, Calendar start, Calendar end) {
-        Calendar seasonStart = reader.getSeasonStart();
-        Calendar seasonEnd = reader.getSeasonEnd();
-        double mult = reader.getSeasonMulti();
         int price = 0;
-
-        switch (r.getCapacity()) {
-            case 1:
-                for (int i = 0; i < (int) daysBetween(start, end); i++) {
-                    price += 130;
-                    //TODO
-                    break;
-                }
-            case 2:
-                price += (180 * (int) daysBetween(start, end));
-                break;
-            case 4:
-                price += (300 * (int) daysBetween(start, end));
-                break;
-            default:
-                price += 0;
-                break;
+        Calendar loopDay = (Calendar) start.clone();
+        int days = (int) daysBetween(start, end);
+        //System.out.println("Days: "+days);
+        for (int i = 0; i < days; i++) {
+            price += reader.getPriceForDay(r.getCapacity(), loopDay);
+            loopDay.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         return price;

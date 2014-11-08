@@ -1,11 +1,13 @@
 package main;
 
+import java.util.Comparator;
 import java.util.stream.IntStream;
 
 /**
  * Created by K O M P U T E R on 2014-10-06.
  */
-public class Room {
+public class Room implements Comparable {
+
     private int ID;
     private int floor;
     private String roomID;
@@ -25,7 +27,7 @@ public class Room {
         this.floor = floor;
         this.beds = beds;
     }
-    
+
     public Room(int ID, int floor, String roomID, int[] beds, int cost) {
         this.ID = ID;
         this.roomID = roomID;
@@ -33,15 +35,15 @@ public class Room {
         this.beds = beds;
         this.cost = cost;
     }
-    
-    public String name(){
+
+    public String name() {
         return roomID;
     }
-    
-    public int nPersons(){
-        int temp=0;
-        for(int i=0;i<beds.length;i++){
-            temp+=beds[i];
+
+    public int nPersons() {
+        int temp = 0;
+        for (int i = 0; i < beds.length; i++) {
+            temp += beds[i];
         }
         return temp;
     }
@@ -77,7 +79,7 @@ public class Room {
     public void setRoomID(String roomID) {
         this.roomID = roomID;
     }
-    
+
     public int getCost() {
         return cost;
     }
@@ -85,35 +87,49 @@ public class Room {
     public void setCost(int cost) {
         this.cost = cost;
     }
-    
-    public int getCapacity(){
+
+    public int getCapacity() {
         return IntStream.of(beds).sum();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != Room.class){
+        if (obj.getClass() != Room.class) {
             return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
-        }else{
+        } else {
             Room temp = (Room) obj;
-            if(temp.getID() != getID()){
+            if (temp.getID() != getID()) {
                 return false;
             }
-            if(temp.getFloor()!= getFloor()){
+            if (temp.getFloor() != getFloor()) {
                 return false;
             }
-            if(!temp.getRoomID().equals(getRoomID())){
+            if (!temp.getRoomID().equals(getRoomID())) {
                 return false;
             }
             boolean check = true;
             int[] tempB = temp.getBeds();
-            for(int i=0; i<beds.length; i++){
-                if(beds[i]!=tempB[i]){
-                    check = false; 
+            for (int i = 0; i < beds.length; i++) {
+                if (beds[i] != tempB[i]) {
+                    check = false;
                 }
             }
             return check;
         }
     }
-    
+
+    @Override
+    public int compareTo(Object t) {
+        Room p2 = (Room) t;
+        if (this.getCapacity() > p2.getCapacity()) {
+            return +1;
+        } else {
+            if(this.getCapacity() < p2.getCapacity()) {
+                return -1;
+            }else{
+                return 0;
+            }
+        }
+    }
+
 }

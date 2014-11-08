@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hotel>
+    <season id="summer">
+        <seasonstart>2016-07-01</seasonstart>
+        <seasonend>2016-09-01</seasonend>
+        <seasonmulti>1.5</seasonmulti>
+    </season>
+    <room>
+        <size>1</size>
+        <price>120</price>
+    </room>
+    <room>
+        <size>2</size>
+        <price>180</price>
+    </room>
+    <room>
+        <size>4</size>
+        <price>300</price>
+    </room>
+</hotel>
