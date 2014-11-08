@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hotel>
-    <season id="summer">
+    <season id="summer-2016">
         <seasonstart>2016-07-01</seasonstart>
         <seasonend>2016-09-01</seasonend>
         <seasonmulti>1.5</seasonmulti>

@@ -173,4 +173,42 @@ public class HotelTest {
         
         assertEquals(expected, instance.getReservationForPerson(person));
     }
+    
+    /**
+     * Test of findFreeRooms method, of class Hotel. With finding a cheapest room in season with existing overlaping reservation.
+     */
+    @Test
+    public void testFindCheapestRoomInSeasonWithReservation() {
+        System.out.println("testFindCheapestRoomInSeasonWithReservation");
+        
+        Person person = new Person();
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        start.set(2016, 7, 10);//0-based month
+        end.set(2016, 7, 12);//0-based month
+        
+        Calendar resStart = Calendar.getInstance();
+        Calendar resEnd = Calendar.getInstance();
+        resStart.set(2016, 7, 7);//0-based month
+        resEnd.set(2016, 7, 11);//0-based month
+        
+        int nPersons = 3;
+        
+        Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        
+        List<QueryResult> expResult = new ArrayList<>();
+        List<Room> room = new ArrayList<>();
+        room.add(new Room(3, 0, "R3", new int[]{2,2}));
+        QueryResult resQuery = new QueryResult(room, (int) (300*2*1.5));
+        instance.reserve(resStart, resEnd, resQuery, person);
+        
+        List<Room> room1 = new ArrayList<>();
+        room1.add(new Room(1, 0, "R1", new int[]{2}));
+        room1.add(new Room(0, 0, "R0", new int[]{1}));
+        QueryResult expQuery = new QueryResult(room1, (int) (180*2*1.5+120*2*1.5));
+        expResult.add(expQuery);
+        
+        List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
+        assertEquals(expResult, result);
+    }
 }

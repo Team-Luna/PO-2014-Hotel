@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by K O M P U T E R on 2014-10-06.
@@ -17,11 +15,19 @@ public class Hotel {
     private List<Reservation> reservation;
     private ConfigReader reader = new ConfigReader();
 
+    /**
+     * Clear Constructor. Makes empty reservation and room lists;
+     */
     public Hotel() {
         this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
     }
 
+    /**
+     * Constructor with room number
+     *
+     * @param rooms number of required double rooms
+     */
     public Hotel(int rooms) {
         this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
@@ -31,6 +37,12 @@ public class Hotel {
         }
     }
 
+    /**
+     * Constructor with room number and specific beds
+     *
+     * @param rooms number of required rooms
+     * @param beds array of beds arrays that will be put into rooms
+     */
     public Hotel(int rooms, int[][] beds) {
         this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
@@ -49,15 +61,39 @@ public class Hotel {
 
     }
 
+    /**
+     * Fuction adding rooms
+     *
+     * @param room
+     */
     public void add(Room room) {
-
+        rooms.add(room);
     }
 
-    public Room room(String room) {
+    /**
+     * Function used to find a room with a name
+     *
+     * @param roomName name of the room to be found
+     * @return
+     */
+    public Room room(String roomName) {
+        for (Room room : rooms) {
+            if (room.getRoomID().equals(roomName)) {
+                return room;
+            }
+        }
         return null;
-
     }
 
+    /**
+     * Function returning best 3 room/price configurations in timespan for
+     * number of persons.
+     *
+     * @param start Starting date of search
+     * @param end Starting date of search
+     * @param nPersons Number of people for whom to find rooms
+     * @return List of room/price configurations
+     */
     public List<QueryResult> findFreeRooms(Calendar start, Calendar end, int nPersons) {
         if (end.before(Calendar.getInstance())) {
             return new ArrayList<QueryResult>();
@@ -67,6 +103,7 @@ public class Hotel {
         }
         List<QueryResult> ret = new ArrayList<>();
         tempRooms = new ArrayList<Room>(rooms);
+        clearTempRooms(start, end); //Removes rooms that have reservations during reservation period.
 
         for (int a = 0; a < 3; a++) {
 
@@ -88,6 +125,13 @@ public class Hotel {
         return ret;
     }
 
+    /**
+     * Function returning number of days between 2 dates.
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public static long daysBetween(final Calendar startDate, final Calendar endDate) {
         //assert: startDate must be before endDate  
         int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
@@ -109,6 +153,12 @@ public class Hotel {
         return presumedDays;
     }
 
+    /**
+     * Function returning optimal number of rooms for nPersons
+     *
+     * @param nPersons
+     * @return
+     */
     private List<Room> getRooms(int nPersons) {
         List<Room> rooms = new ArrayList<>();
         //Easy Variant
@@ -124,15 +174,9 @@ public class Hotel {
         Collections.sort(tempRooms, Collections.reverseOrder());
         int assignedCapacity = 0;
         while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
-            if (isThereFittingRoom(nPersons - assignedCapacity)) {
-                Room temp = getFittingRoom(nPersons - assignedCapacity);
-                rooms.add(temp);
-                assignedCapacity += temp.getCapacity();
-            } else {
-                Room temp = getBestFittingRoom(nPersons - assignedCapacity);
-                rooms.add(temp);
-                assignedCapacity += temp.getCapacity();
-            }
+            Room temp = getBestFittingRoom(nPersons - assignedCapacity);
+            rooms.add(temp);
+            assignedCapacity += temp.getCapacity();
             if (assignedCapacity >= nPersons) {
                 break;
             }
@@ -143,30 +187,58 @@ public class Hotel {
         return new ArrayList<>();
     }
 
+    /**
+     * Reservation function
+     *
+     * @param start start date
+     * @param end end date
+     * @param result Chosen Query Result
+     * @param person Person assigned to reservation
+     */
     public void reserve(Calendar start, Calendar end, QueryResult result, Person person) {
         Reservation newRes = new Reservation(start, end, result, person);
         this.reservation.add(newRes);
     }
-    
-    public Reservation getReservationForPerson(Person person){
-        for(Reservation res : reservation){
-            if(res.isAssignedTo(person)){
+
+    /**
+     * Returns reservation assigned to person
+     *
+     * @param person
+     * @return
+     */
+    public Reservation getReservationForPerson(Person person) {
+        for (Reservation res : reservation) {
+            if (res.isAssignedTo(person)) {
                 return res;
             }
         }
         return null;
     }
-    
-    public List<Reservation> getReservationListForPerson(Person person){
+
+    /**
+     * Returns list of reservations assigned to person
+     *
+     * @param person
+     * @return
+     */
+    public List<Reservation> getReservationListForPerson(Person person) {
         List<Reservation> ret = new ArrayList<>();
-        for(Reservation res : reservation){
-            if(res.isAssignedTo(person)){
+        for (Reservation res : reservation) {
+            if (res.isAssignedTo(person)) {
                 ret.add(res);
             }
         }
         return ret;
     }
 
+    /**
+     * Returns room price for the stated period.
+     *
+     * @param r room
+     * @param start start date
+     * @param end end date
+     * @return
+     */
     private int getRoomPrice(Room r, Calendar start, Calendar end) {
         int price = 0;
         Calendar loopDay = (Calendar) start.clone();
@@ -180,28 +252,15 @@ public class Hotel {
         return price;
     }
 
-    private boolean isThereFittingRoom(int i) {
-        for (Room room : tempRooms) {
-            if (room.getCapacity() == i) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Room getFittingRoom(int i) {
-        Room ret = null;
-        for (Room room : tempRooms) {
-            if (room.getCapacity() == i) {
-                ret = room;
-            }
-        }
-        if (ret != null) {
-            tempRooms.remove(ret);
-        }
-        return ret;
-    }
-
+    /**
+     * Function finding best fitting room
+     * When presented with equal distance will prefere bigger room
+     * ex.: nPersons = 3, Rooms 4, 2, 2, 1 capacity
+     * Will choose 4 person room
+     *
+     * @param i
+     * @return
+     */
     private Room getBestFittingRoom(int i) {
         List<Room> best = new ArrayList<>();
         for (Room room : tempRooms) {
@@ -218,8 +277,35 @@ public class Hotel {
         return best.get(0);
     }
 
+    /**
+     * Function returning size difference between rooms
+     *
+     * @param roomSize
+     * @param desiredSize
+     * @return
+     */
     private int getSizeDiff(int roomSize, int desiredSize) {
         return Math.abs(roomSize - desiredSize);
+    }
+
+    /**
+     * Crear tempRooms array of rooms that are reserved during the time period
+     * @param start
+     * @param end 
+     */
+    private void clearTempRooms(Calendar start, Calendar end) {
+        for (Reservation res : reservation) {
+            if ((res.getStartingDate().after(start)) && (res.getStartingDate().before(end))) {
+                for (Room room : res.getRoomList()) {
+                    tempRooms.remove(room);
+                }
+            }
+            if ((res.getEndDate().after(start)) && (res.getEndDate().before(end))) {
+                for (Room room : res.getRoomList()) {
+                    tempRooms.remove(room);
+                }
+            }
+        }
     }
 
 }
