@@ -19,6 +19,7 @@ public class Hotel {
 
     public Hotel() {
         this.reservation = new ArrayList<>();
+        this.rooms = new ArrayList<>();
     }
 
     public Hotel(int rooms) {
@@ -73,7 +74,7 @@ public class Hotel {
             if (proposedRooms.isEmpty()) {
                 break;
             }
-            //System.out.println("Loop: "+a);
+            System.out.println("Loop: " + a);
             int price = 0;
             for (Room r : proposedRooms) {
                 //System.out.println("Room: "+r.name()+"|"+r.getCapacity());
@@ -122,19 +123,20 @@ public class Hotel {
         //Hard Variant
         Collections.sort(tempRooms, Collections.reverseOrder());
         int assignedCapacity = 0;
-        for (Room room : tempRooms) {
-            assignedCapacity += room.getCapacity();
-            rooms.add(room);
-            //tempRooms.remove(room);
-
+        while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
+            if (isThereFittingRoom(nPersons - assignedCapacity)) {
+                Room temp = getFittingRoom(nPersons - assignedCapacity);
+                rooms.add(temp);
+                assignedCapacity += temp.getCapacity();
+            } else {
+                Room temp = getBestFittingRoom(nPersons - assignedCapacity);
+                rooms.add(temp);
+                assignedCapacity += temp.getCapacity();
+            }
             if (assignedCapacity >= nPersons) {
                 break;
             }
         }
-        for (Room room : rooms) {
-            tempRooms.remove(room);
-        }
-        //return rooms;
         if (assignedCapacity >= nPersons) {
             return rooms;
         }
@@ -145,18 +147,79 @@ public class Hotel {
         Reservation newRes = new Reservation(start, end, result, person);
         this.reservation.add(newRes);
     }
+    
+    public Reservation getReservationForPerson(Person person){
+        for(Reservation res : reservation){
+            if(res.isAssignedTo(person)){
+                return res;
+            }
+        }
+        return null;
+    }
+    
+    public List<Reservation> getReservationListForPerson(Person person){
+        List<Reservation> ret = new ArrayList<>();
+        for(Reservation res : reservation){
+            if(res.isAssignedTo(person)){
+                ret.add(res);
+            }
+        }
+        return ret;
+    }
 
     private int getRoomPrice(Room r, Calendar start, Calendar end) {
         int price = 0;
         Calendar loopDay = (Calendar) start.clone();
         int days = (int) daysBetween(start, end);
-        //System.out.println("Days: "+days);
+        //System.out.println("Days: " + days);
         for (int i = 0; i < days; i++) {
             price += reader.getPriceForDay(r.getCapacity(), loopDay);
             loopDay.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         return price;
+    }
+
+    private boolean isThereFittingRoom(int i) {
+        for (Room room : tempRooms) {
+            if (room.getCapacity() == i) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Room getFittingRoom(int i) {
+        Room ret = null;
+        for (Room room : tempRooms) {
+            if (room.getCapacity() == i) {
+                ret = room;
+            }
+        }
+        if (ret != null) {
+            tempRooms.remove(ret);
+        }
+        return ret;
+    }
+
+    private Room getBestFittingRoom(int i) {
+        List<Room> best = new ArrayList<>();
+        for (Room room : tempRooms) {
+            if (best.isEmpty()) {
+                best.add(0, room);
+            }
+            if (getSizeDiff(room.getCapacity(), i) < getSizeDiff(best.get(0).getCapacity(), i)) {
+                best.add(0, room);
+            }
+        }
+        if (best.get(0) != null) {
+            tempRooms.remove(best.get(0));
+        }
+        return best.get(0);
+    }
+
+    private int getSizeDiff(int roomSize, int desiredSize) {
+        return Math.abs(roomSize - desiredSize);
     }
 
 }

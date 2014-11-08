@@ -7,6 +7,7 @@ import java.util.List;
  * Created by K O M P U T E R on 2014-10-06.
  */
 public class Reservation {
+
     private QueryResult res;
     private Person customer;
     private Calendar startingDate;
@@ -39,10 +40,9 @@ public class Reservation {
         return res.rooms();
     }
 
-   /* public void setRoomList(Room[] roomList) {
-        this.roomList = roomList;
-    }*/
-
+    /* public void setRoomList(Room[] roomList) {
+     this.roomList = roomList;
+     }*/
     public String getCustomerName() {
         return customer.getName();
     }
@@ -67,6 +67,10 @@ public class Reservation {
         this.customer.setAddress(customerAddress);
     }
 
+    public boolean isAssignedTo(Person per) {
+        return customer.equals(per);
+    }
+
     public Calendar getStartingDate() {
         return startingDate;
     }
@@ -81,5 +85,39 @@ public class Reservation {
 
     public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != Reservation.class) {
+            return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+        } else {
+            Reservation temp = (Reservation) obj;
+            if (temp.customer != customer) {
+                return false;
+            }
+            if (temp.startingDate.get(Calendar.YEAR) != startingDate.get(Calendar.YEAR)) {
+                return false;
+            }
+            if (temp.startingDate.get(Calendar.MONTH) != startingDate.get(Calendar.MONTH)) {
+                return false;
+            }
+            if (temp.startingDate.get(Calendar.DAY_OF_MONTH) != startingDate.get(Calendar.DAY_OF_MONTH)) {
+                return false;
+            }
+            if (temp.endDate.get(Calendar.YEAR) != endDate.get(Calendar.YEAR)) {
+                return false;
+            }
+            if (temp.endDate.get(Calendar.MONTH) != endDate.get(Calendar.MONTH)) {
+                return false;
+            }
+            if (temp.endDate.get(Calendar.DAY_OF_MONTH) != endDate.get(Calendar.DAY_OF_MONTH)) {
+                return false;
+            }
+            if (temp.res != res) {
+                return false;
+            }
+            return true;
+        }
     }
 }

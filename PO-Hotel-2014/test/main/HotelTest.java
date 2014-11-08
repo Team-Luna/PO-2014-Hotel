@@ -41,34 +41,6 @@ public class HotelTest {
     }
 
     /**
-     * Test of add method, of class Hotel.
-     */
-    @Test
-    public void testAdd() {
-        System.out.println("add");
-        Room room = null;
-        Hotel instance = new Hotel();
-        instance.add(room);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of room method, of class Hotel.
-     */
-    @Test
-    public void testRoom() {
-        System.out.println("room");
-        String room = "";
-        Hotel instance = new Hotel();
-        Room expResult = null;
-        Room result = instance.room(room);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of findFreeRooms method, of class Hotel. With no free rooms.
      */
     @Test
@@ -89,8 +61,8 @@ public class HotelTest {
      * Test of findFreeRooms method, of class Hotel. With a single free room.
      */
     @Test
-    public void testFindDoubleRoom() {
-        System.out.println("testFindDoubleRoom");
+    public void testFindSingleDoubleRoom() {
+        System.out.println("testFindSingleDoubleRoom");
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         start.set(2016, 10, 10);//0-based month
@@ -121,7 +93,7 @@ public class HotelTest {
         int nPersons = 3;
         
         Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
-        //TODO Costs && Expected Result
+        
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
         room.add(new Room(3, 0, "R3", new int[]{2,2}));
@@ -130,8 +102,8 @@ public class HotelTest {
         
         List<Room> room1 = new ArrayList<>();
         room1.add(new Room(1, 0, "R1", new int[]{2}));
-        room1.add(new Room(2, 0, "R2", new int[]{2}));
-        QueryResult expQuery2 = new QueryResult(room1, 180*2*2);
+        room1.add(new Room(0, 0, "R0", new int[]{1}));
+        QueryResult expQuery2 = new QueryResult(room1, 180*2+120*2);
         expResult.add(expQuery2);
         
         List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
@@ -150,13 +122,19 @@ public class HotelTest {
         end.set(2016, 7, 12);//0-based month
         int nPersons = 3;
         
-        Hotel instance = new Hotel(1, new int[][]{new int[]{2,2}});
-        //TODO Costs && Expected Result
+        Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(0, 0, "R0", new int[]{2,2}));
+        room.add(new Room(3, 0, "R3", new int[]{2,2}));
         QueryResult expQuery = new QueryResult(room, (int) (300*2*1.5));
         expResult.add(expQuery);
+        
+        List<Room> room1 = new ArrayList<>();
+        room1.add(new Room(1, 0, "R1", new int[]{2}));
+        room1.add(new Room(0, 0, "R0", new int[]{1}));
+        QueryResult expQuery2 = new QueryResult(room1, (int) (180*2*1.5+120*2*1.5));
+        expResult.add(expQuery2);
         
         List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
         assertEquals(expResult, result);
@@ -191,7 +169,8 @@ public class HotelTest {
         Hotel instance = new Hotel();
         instance.reserve(start, end, qres, person);
         
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Reservation expected = new Reservation(start, end, qres, person);
+        
+        assertEquals(expected, instance.getReservationForPerson(person));
     }
 }

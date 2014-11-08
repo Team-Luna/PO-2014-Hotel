@@ -12,7 +12,6 @@ public class Room implements Comparable {
     private int floor;
     private String roomID;
     private int[] beds;
-    private int cost;
 
     public Room() {
         this.ID = -1;
@@ -26,14 +25,6 @@ public class Room implements Comparable {
         this.roomID = roomID;
         this.floor = floor;
         this.beds = beds;
-    }
-
-    public Room(int ID, int floor, String roomID, int[] beds, int cost) {
-        this.ID = ID;
-        this.roomID = roomID;
-        this.floor = floor;
-        this.beds = beds;
-        this.cost = cost;
     }
 
     public String name() {
@@ -78,14 +69,6 @@ public class Room implements Comparable {
 
     public void setRoomID(String roomID) {
         this.roomID = roomID;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
     }
 
     public int getCapacity() {
