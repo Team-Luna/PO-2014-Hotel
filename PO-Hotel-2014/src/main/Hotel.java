@@ -22,6 +22,16 @@ public class Hotel {
         this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
     }
+    
+    /**
+     * Constructor that loads Hotel from Files
+     * 
+     * @param load 
+     */
+    public Hotel(boolean load) {
+        this.reservation = new ArrayList<>();
+        this.rooms = reader.loadRooms();
+    }
 
     /**
      * Constructor with room number
@@ -162,29 +172,32 @@ public class Hotel {
     private List<Room> getRooms(int nPersons) {
         List<Room> rooms = new ArrayList<>();
         //Easy Variant
-        /*
-         for (Room room : tempRooms) {
-         if (room.getCapacity() >= nPersons) {
-         rooms.add(room);
-         tempRooms.remove(room);
-         break;
-         }
-         }*/
-        //Hard Variant
-        Collections.sort(tempRooms, Collections.reverseOrder());
-        int assignedCapacity = 0;
-        while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
-            Room temp = getBestFittingRoom(nPersons - assignedCapacity);
-            rooms.add(temp);
-            assignedCapacity += temp.getCapacity();
-            if (assignedCapacity >= nPersons) {
+
+        for (Room room : tempRooms) {
+            if (room.getCapacity() >= nPersons) {
+                rooms.add(room);
+                tempRooms.remove(room);
                 break;
             }
         }
-        if (assignedCapacity >= nPersons) {
-            return rooms;
-        }
+        return rooms;
+        //Hard Variant
+         /*
+         Collections.sort(tempRooms, Collections.reverseOrder());
+         int assignedCapacity = 0;
+         while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
+         Room temp = getBestFittingRoom(nPersons - assignedCapacity);
+         rooms.add(temp);
+         assignedCapacity += temp.getCapacity();
+         if (assignedCapacity >= nPersons) {
+         break;
+         }
+         }
+         if (assignedCapacity >= nPersons) {
+         return rooms;
+         }
         return new ArrayList<>();
+         */
     }
 
     /**
@@ -245,7 +258,7 @@ public class Hotel {
         int days = (int) daysBetween(start, end);
         //System.out.println("Days: " + days);
         for (int i = 0; i < days; i++) {
-            price += reader.getPriceForDay(r.getCapacity(), loopDay);
+            price += r.getPriceForDay(loopDay);
             loopDay.add(Calendar.DAY_OF_MONTH, 1);
         }
 
@@ -253,9 +266,8 @@ public class Hotel {
     }
 
     /**
-     * Function finding best fitting room
-     * When presented with equal distance will prefere bigger room
-     * ex.: nPersons = 3, Rooms 4, 2, 2, 1 capacity
+     * Function finding best fitting room When presented with equal distance
+     * will prefere bigger room ex.: nPersons = 3, Rooms 4, 2, 2, 1 capacity
      * Will choose 4 person room
      *
      * @param i
@@ -290,8 +302,9 @@ public class Hotel {
 
     /**
      * Crear tempRooms array of rooms that are reserved during the time period
+     *
      * @param start
-     * @param end 
+     * @param end
      */
     private void clearTempRooms(Calendar start, Calendar end) {
         for (Reservation res : reservation) {

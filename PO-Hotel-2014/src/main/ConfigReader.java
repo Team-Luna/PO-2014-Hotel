@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +27,7 @@ import org.xml.sax.SAXException;
 public class ConfigReader {
 
     File fXmlFile;
-    Document doc;
+    static Document doc;
 
     public ConfigReader() {
         try {
@@ -43,58 +45,60 @@ public class ConfigReader {
         }
     }
 
-    public double getPriceForDay(int roomSize, Calendar day) {
-        return getRoomCost(roomSize)*getSeasonMulti(day);
-    }
-
-    private int getRoomCost(int roomSize) {
+    public List<Room> loadRooms() {
         NodeList nList = doc.getElementsByTagName("room");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<Room> rooms = new ArrayList<>();
+
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
+            Room room = new Room();
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                int size = Integer.parseInt(eElement.getElementsByTagName("size").item(0).getTextContent());
-                int price = Integer.parseInt(eElement.getElementsByTagName("price").item(0).getTextContent());
-                if(size == roomSize){
-                    //System.out.println("Return from getRoomCost");
-                    return price;
+                room.setID(Integer.parseInt(eElement.getElementsByTagName("id").item(0).getTextContent()));
+                room.setFloor(Integer.parseInt(eElement.getElementsByTagName("floor").item(0).getTextContent()));
+                room.setPrice(Integer.parseInt(eElement.getElementsByTagName("price").item(0).getTextContent()));
+                room.setRoomID(eElement.getElementsByTagName("roomID").item(0).getTextContent());
+
+                /* TODO
+                NodeList bedList = eElement.getElementsByTagName("bed");
+                int[] beds = new int[bedList.getLength()];
+                for (int i = 0; i < bedList.getLength(); i++) {
+                    Node bedNode = bedList.item(temp);
+                    Element bedElement = (Element) bedNode;
+                    System.out.println(bedElement);
+                    beds[i] = Integer.parseInt(bedElement.getTextContent());
                 }
-            }
-        }
-        return Integer.MAX_VALUE;
-    }
+                room.setBeds(beds);
+                */
 
-    private double getSeasonMulti(Calendar day) {
-        NodeList nList = doc.getElementsByTagName("season");
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        for (int temp = 0; temp < nList.getLength(); temp++) {
-            Node nNode = nList.item(temp);
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                try {
-                    Element eElement = (Element) nNode;
-                    Calendar start = Calendar.getInstance();
-                    Calendar end = Calendar.getInstance();
-                    String seasonstart = eElement.getElementsByTagName("seasonstart").item(0).getTextContent();
-                    String seasonend = eElement.getElementsByTagName("seasonend").item(0).getTextContent();
-                    //eElement.getAttribute("id");
-                    Date date = formatter.parse(seasonstart);
-                    start.setTime(date);
-                    date = formatter.parse(seasonend);
-                    end.setTime(date);
-                    //System.out.println(start.get(Calendar.MONTH)+":"+start.get(Calendar.DAY_OF_MONTH)+"|"+end.get(Calendar.MONTH)+":"+end.get(Calendar.DAY_OF_MONTH)+"|=|"+day.get(Calendar.MONTH)+":"+day.get(Calendar.DAY_OF_MONTH));
-                    if(start.before(day)){
-                        if(end.after(day)){
-                            String multi = eElement.getElementsByTagName("seasonmulti").item(0).getTextContent();
-                            return Double.parseDouble(multi);
-                        }
+                NodeList seasonList = eElement.getElementsByTagName("season");
+                List<Season> seasons = new ArrayList<>();
+                for (int i = 0; i < seasonList.getLength(); i++) {
+                    try {
+                        Node seasonNode = seasonList.item(temp);
+                        Element seasonElement = (Element) seasonNode;
+                        System.out.println(seasonElement); //TODO
+                        Calendar start = Calendar.getInstance();
+                        Calendar end = Calendar.getInstance();
+                        String seasonstart = seasonElement.getElementsByTagName("seasonstart").item(0).getTextContent();
+                        String seasonend = seasonElement.getElementsByTagName("seasonend").item(0).getTextContent();
+                        //seasonElement.getAttribute("id");
+                        Date date = formatter.parse(seasonstart);
+                        start.setTime(date);
+                        date = formatter.parse(seasonend);
+                        end.setTime(date);
+                        int price = Integer.parseInt(seasonElement.getElementsByTagName("price").item(0).getTextContent());
+                        seasons.add(new Season(start, end, price));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (ParseException ex) {
-                    Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                room.setSeasons(seasons);
             }
+            rooms.add(room);
         }
-        return 1;
+        return rooms;
     }
 
 }

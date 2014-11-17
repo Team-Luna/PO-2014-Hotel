@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Calendar;
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -11,6 +13,8 @@ public class Room implements Comparable {
     private int floor;
     private String roomID;
     private int[] beds;
+    private int price;
+    private List<Season> seasons;
 
     public Room() {
         this.ID = -1;
@@ -26,6 +30,14 @@ public class Room implements Comparable {
         this.beds = beds;
     }
 
+    public Room(int ID, int floor, String roomID, int[] beds, List<Season> seasons) {
+        this.ID = ID;
+        this.roomID = roomID;
+        this.floor = floor;
+        this.beds = beds;
+        this.seasons = seasons;
+    }
+
     public String name() {
         return roomID;
     }
@@ -36,6 +48,19 @@ public class Room implements Comparable {
             temp += beds[i];
         }
         return temp;
+    }
+
+    public int getPriceForDay(Calendar day) {
+        if (!seasons.isEmpty()) {
+            for (Season season : seasons) {
+                if (season.start.before(day)) {
+                    if (season.end.after(day)) {
+                        return season.price;
+                    }
+                }
+            }
+        }
+        return price;
     }
 
     public int getFloor() {
@@ -74,6 +99,14 @@ public class Room implements Comparable {
         return IntStream.of(beds).sum();
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() != Room.class) {
@@ -106,9 +139,9 @@ public class Room implements Comparable {
         if (this.getCapacity() > p2.getCapacity()) {
             return +1;
         } else {
-            if(this.getCapacity() < p2.getCapacity()) {
+            if (this.getCapacity() < p2.getCapacity()) {
                 return -1;
-            }else{
+            } else {
                 return 0;
             }
         }
