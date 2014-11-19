@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hotel>
+    <!-- ############################################## -->
+    <room>
+        <id>1</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R01</roomID><!-- String -->
+        <bed>4</bed><!-- int -->
+        <price>400</price><!-- int -->
+    </room>
+    <room>
+        <id>2</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R02</roomID><!-- String -->
+        <bed>2</bed><!-- int -->
+        <price>200</price><!-- int -->
+    </room>
+    <room>
+        <id>3</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R03</roomID><!-- String -->
+        <bed>1</bed><!-- int -->
+        <price>50</price><!-- int -->
+    </room>
+    <room>
+        <id>4</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R04</roomID><!-- String -->
+        <bed>1</bed><!-- int -->
+        <price>50</price><!-- int -->
+    </room>
+    <room>
+        <id>5</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R05</roomID><!-- String -->
+        <bed>1</bed><!-- int -->
+        <price>50</price><!-- int -->
+    </room>
+</hotel>

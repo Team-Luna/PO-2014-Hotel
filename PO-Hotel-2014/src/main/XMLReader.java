@@ -22,14 +22,14 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author K O M P U T E R
+ * @author Michał Szura
  */
-public class ConfigReader {
+public class XMLReader {
 
     File fXmlFile;
     static Document doc;
 
-    public ConfigReader() {
+    public XMLReader() {
         try {
             fXmlFile = new File("src/user.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -37,11 +37,27 @@ public class ConfigReader {
             doc = dBuilder.parse(fXmlFile);
             doc.getDocumentElement().normalize();
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public XMLReader(String path) {
+        try {
+            fXmlFile = new File(path);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            doc = dBuilder.parse(fXmlFile);
+            doc.getDocumentElement().normalize();
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -49,6 +65,7 @@ public class ConfigReader {
         NodeList nList = doc.getElementsByTagName("room");
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         List<Room> rooms = new ArrayList<>();
+        System.out.println("-Loading " + nList.getLength() + " rooms.");
 
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
@@ -60,38 +77,44 @@ public class ConfigReader {
                 room.setPrice(Integer.parseInt(eElement.getElementsByTagName("price").item(0).getTextContent()));
                 room.setRoomID(eElement.getElementsByTagName("roomID").item(0).getTextContent());
 
-                /* TODO
+                //System.out.println("Room: " + room.getRoomID());
+
                 NodeList bedList = eElement.getElementsByTagName("bed");
+                //System.out.println("    BedListLength: " + bedList.getLength());
                 int[] beds = new int[bedList.getLength()];
                 for (int i = 0; i < bedList.getLength(); i++) {
-                    Node bedNode = bedList.item(temp);
-                    Element bedElement = (Element) bedNode;
-                    System.out.println(bedElement);
-                    beds[i] = Integer.parseInt(bedElement.getTextContent());
+                    Node bedNode = bedList.item(i);
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element bedElement = (Element) bedNode;
+                        //System.out.println("        BedElementValue: " + bedElement.getTextContent());
+                        beds[i] = Integer.parseInt(bedElement.getTextContent());
+                    }
                 }
                 room.setBeds(beds);
-                */
 
                 NodeList seasonList = eElement.getElementsByTagName("season");
                 List<Season> seasons = new ArrayList<>();
+                //System.out.println("    SeasonListLength: " + seasonList.getLength());
                 for (int i = 0; i < seasonList.getLength(); i++) {
                     try {
-                        Node seasonNode = seasonList.item(temp);
+                        Node seasonNode = seasonList.item(i);
                         Element seasonElement = (Element) seasonNode;
-                        System.out.println(seasonElement); //TODO
+                        //System.out.println(seasonElement.getTextContent());
                         Calendar start = Calendar.getInstance();
                         Calendar end = Calendar.getInstance();
                         String seasonstart = seasonElement.getElementsByTagName("seasonstart").item(0).getTextContent();
+                        //System.out.println("        SeasonElementStartValue: " + seasonstart);
                         String seasonend = seasonElement.getElementsByTagName("seasonend").item(0).getTextContent();
-                        //seasonElement.getAttribute("id");
+                        //System.out.println("        SeasonElementEndValue: " + seasonend);
                         Date date = formatter.parse(seasonstart);
                         start.setTime(date);
                         date = formatter.parse(seasonend);
                         end.setTime(date);
                         int price = Integer.parseInt(seasonElement.getElementsByTagName("price").item(0).getTextContent());
+                        //System.out.println("        SeasonElementPriceValue: " + price);
                         seasons.add(new Season(start, end, price));
                     } catch (ParseException ex) {
-                        Logger.getLogger(ConfigReader.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 room.setSeasons(seasons);

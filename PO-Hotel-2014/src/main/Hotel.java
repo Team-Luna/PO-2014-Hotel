@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import javafx.print.Collation;
 
 /**
  * Created by K O M P U T E R on 2014-10-06.
@@ -13,7 +14,7 @@ public class Hotel {
     private List<Room> rooms;
     private List<Room> tempRooms;
     private List<Reservation> reservation;
-    private ConfigReader reader = new ConfigReader();
+    private XMLReader reader = new XMLReader();
 
     /**
      * Clear Constructor. Makes empty reservation and room lists;
@@ -22,14 +23,30 @@ public class Hotel {
         this.reservation = new ArrayList<>();
         this.rooms = new ArrayList<>();
     }
-    
+
     /**
-     * Constructor that loads Hotel from Files
-     * 
-     * @param load 
+     * Constructor that loads Hotel from Config File
+     *
+     * @param load
      */
     public Hotel(boolean load) {
+        if (true) {
+            this.reservation = new ArrayList<>();
+            this.rooms = reader.loadRooms();
+        } else {
+            this.reservation = new ArrayList<>();
+            this.rooms = new ArrayList<>();
+        }
+    }
+
+    /**
+     * Constructor that loads Hotel from File
+     *
+     * @param load
+     */
+    public Hotel(String path) {
         this.reservation = new ArrayList<>();
+        this.reader = new XMLReader(path);
         this.rooms = reader.loadRooms();
     }
 
@@ -115,13 +132,14 @@ public class Hotel {
         tempRooms = new ArrayList<Room>(rooms);
         clearTempRooms(start, end); //Removes rooms that have reservations during reservation period.
 
+        //##### Phase 1 - Get Best Fitting Rooms
         for (int a = 0; a < 3; a++) {
 
             List<Room> proposedRooms = getRooms(nPersons);
             if (proposedRooms.isEmpty()) {
                 break;
             }
-            System.out.println("Loop: " + a);
+            //System.out.println("Loop: " + a);
             int price = 0;
             for (Room r : proposedRooms) {
                 //System.out.println("Room: "+r.name()+"|"+r.getCapacity());
@@ -132,7 +150,39 @@ public class Hotel {
             QueryResult retQuery = new QueryResult(proposedRooms, price);
             ret.add(retQuery);
         }
-        return ret;
+
+        //##### Phase 2 - Get Smallest Rooms
+        tempRooms = new ArrayList<Room>(rooms);
+        clearTempRooms(start, end); //Removes rooms that have reservations during reservation period.
+        QueryResult retQuery = getSmallRooms(nPersons, start, end);
+        ret.add(retQuery);
+
+        //##### Phase 3 - Get Cheapest Rooms NoTest
+        tempRooms = new ArrayList<Room>(rooms);
+        clearTempRooms(start, end); //Removes rooms that have reservations during reservation period.
+        retQuery = getCheapestRooms(nPersons, start, end);
+        ret.add(retQuery);
+
+        //##### Final Phase
+        List<QueryResult> returnQ = new ArrayList<>();
+        int lowestPrice = Integer.MAX_VALUE;
+        Collections.sort(ret);
+        //for (QueryResult returnQuery : ret) {
+        for (int i = 0; i < ret.size(); i++) {
+            if (ret.get(i).price() < lowestPrice) {
+                returnQ.clear();
+                returnQ.add(ret.get(i));
+                lowestPrice = ret.get(i).price();
+            }
+            if (ret.get(i).price() == lowestPrice && !returnQ.contains(ret.get(i))) {
+                returnQ.add(ret.get(i));
+            }
+        }
+        if (!returnQ.isEmpty()) {
+            return returnQ;
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -172,32 +222,31 @@ public class Hotel {
     private List<Room> getRooms(int nPersons) {
         List<Room> rooms = new ArrayList<>();
         //Easy Variant
-
-        for (Room room : tempRooms) {
-            if (room.getCapacity() >= nPersons) {
-                rooms.add(room);
-                tempRooms.remove(room);
-                break;
-            }
-        }
-        return rooms;
-        //Hard Variant
-         /*
-         Collections.sort(tempRooms, Collections.reverseOrder());
-         int assignedCapacity = 0;
-         while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
-         Room temp = getBestFittingRoom(nPersons - assignedCapacity);
-         rooms.add(temp);
-         assignedCapacity += temp.getCapacity();
-         if (assignedCapacity >= nPersons) {
+        /*
+         for (Room room : tempRooms) {
+         if (room.getCapacity() >= nPersons) {
+         rooms.add(room);
+         tempRooms.remove(room);
          break;
          }
          }
-         if (assignedCapacity >= nPersons) {
          return rooms;
-         }
-        return new ArrayList<>();
          */
+        //Hard Variant
+        Collections.sort(tempRooms, Collections.reverseOrder());
+        int assignedCapacity = 0;
+        while (assignedCapacity < nPersons && !tempRooms.isEmpty()) {
+            Room temp = getBestFittingRoom(nPersons - assignedCapacity);
+            rooms.add(temp);
+            assignedCapacity += temp.getCapacity();
+            if (assignedCapacity >= nPersons) {
+                break;
+            }
+        }
+        if (assignedCapacity >= nPersons) {
+            return rooms;
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -319,6 +368,81 @@ public class Hotel {
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    private QueryResult getSmallRooms(int nPersons, Calendar start, Calendar end) {
+        List<Room> rooms = new ArrayList<>();
+        Collections.sort(tempRooms);
+        int assignedCapacity = 0;
+        int lowestPrice = Integer.MAX_VALUE;
+        int finalPrice = 0;
+
+        for (Room room : tempRooms) {
+            if (rooms.isEmpty()) {
+                rooms.add(room);
+                assignedCapacity += room.getCapacity();
+                lowestPrice = getRoomPrice(room, start, end);
+                finalPrice += getRoomPrice(room, start, end);
+            }
+            if (getRoomPrice(room, start, end) < lowestPrice) {
+                rooms.add(room);
+                assignedCapacity += room.getCapacity();
+                lowestPrice = getRoomPrice(room, start, end);
+                finalPrice += getRoomPrice(room, start, end);
+            } else {
+                if (getRoomPrice(room, start, end) < (lowestPrice + (lowestPrice * 1.5))) {
+                    rooms.add(room);
+                    assignedCapacity += room.getCapacity();
+                    finalPrice += getRoomPrice(room, start, end);
+                }
+            }
+            if (assignedCapacity >= nPersons || !tempRooms.isEmpty()) {
+                break;
+            }
+        }
+        if (assignedCapacity < nPersons) {
+            return new QueryResult();
+        }
+
+        return new QueryResult(rooms, finalPrice);
+    }
+
+    private QueryResult getCheapestRooms(int nPersons, Calendar start, Calendar end) {
+        List<Room> rooms = new ArrayList<>();
+        Collections.sort(tempRooms);
+        int assignedCapacity = 0;
+        int finalPrice = 0;
+
+        for (int i = 0; i < tempRooms.size(); i++) {
+            Room r = getCheapestRoom(start, end);
+            if (assignedCapacity < nPersons) {
+                rooms.add(r);
+                assignedCapacity += r.getCapacity();
+                finalPrice += getRoomPrice(r, start, end);
+            }
+        }
+        
+        if (assignedCapacity < nPersons) {
+            return new QueryResult();
+        }
+
+        return new QueryResult(rooms, finalPrice);
+    }
+
+    private Room getCheapestRoom(Calendar start, Calendar end) {
+        int lowestPrice = Integer.MAX_VALUE;
+        Room cheapestRoom = new Room();
+        for (Room room : tempRooms) {
+            if (getRoomPrice(room, start, end) < lowestPrice) {
+                cheapestRoom = room;
+                lowestPrice = getRoomPrice(room, start, end);
+            }
+        }
+        return cheapestRoom;
     }
 
 }

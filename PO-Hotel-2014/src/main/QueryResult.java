@@ -13,24 +13,24 @@ import java.util.List;
  *
  * @author student
  */
-class QueryResult {
+class QueryResult implements Comparable {
 
     private List<Room> rooms;
     private int price;
 
     public QueryResult() {
         this.rooms = new ArrayList<>();
-        this.price = 0;
+        this.price = Integer.MAX_VALUE;
     }
 
     public QueryResult(List<Room> rooms, int price) {
         this.rooms = rooms;
         this.price = price;
     }
-    
+
     public QueryResult(List<Room> rooms) {
         this.rooms = rooms;
-        this.price = 0;
+        this.price = Integer.MAX_VALUE;
     }
 
     public List<Room> rooms() {
@@ -41,23 +41,47 @@ class QueryResult {
         return this.price;
     }
 
+    public int roomsCapacity() {
+        int cap = 0;
+        for (Room r : rooms) {
+            cap += r.getCapacity();
+        }
+        return cap;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != QueryResult.class){
+        if (obj.getClass() != QueryResult.class) {
             return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
-        }else{
+        } else {
             QueryResult temp = (QueryResult) obj;
-            if(temp.price() != price()){
+            if (temp.price() != price()) {
                 return false;
             }
-            boolean check = true;
-            for(int i=0; i<rooms.size(); i++){
-                if(!(rooms.get(i).equals(temp.rooms.get(i)))){
-                    check = false; 
-                }
+            if (rooms.isEmpty() && temp.rooms.isEmpty()) {
+                return true;
             }
-            return check;
+            if (rooms.isEmpty() || temp.rooms.isEmpty()) {
+                return false;
+            }
+            if (roomsCapacity() == temp.roomsCapacity()) {
+                return true;
+            }
+            return false;
         }
     }
-    
+
+    @Override
+    public int compareTo(Object t) {
+        QueryResult p2 = (QueryResult) t;
+        if (this.price() > p2.price()) {
+            return +1;
+        } else {
+            if (this.price() < p2.price()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
 }

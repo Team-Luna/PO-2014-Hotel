@@ -18,9 +18,9 @@ import org.w3c.dom.Element;
  *
  * @author Konrad Welc
  */
-public class ReservationWrite {
+public class XMLWriter {
 
-    public ReservationWrite(List<Reservation> reservation) {
+    public void saveReservation(List<Reservation> reservation) {
         int ResId = 0;
         try {
 

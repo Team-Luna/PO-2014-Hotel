@@ -5,9 +5,7 @@
         <id>1</id><!-- int -->
         <floor>0</floor><!-- int -->
         <roomID>R01</roomID><!-- String -->
-        <beds>
-            <bed>1</bed><!-- int -->
-        </beds>
+        <bed>1</bed><!-- int -->
         <price>120</price><!-- int -->
         <season id="summer-2016">
             <seasonstart>2016-07-01</seasonstart><!-- Date -->
@@ -25,10 +23,8 @@
         <id>2</id><!-- int -->
         <floor>0</floor><!-- int -->
         <roomID>R02</roomID><!-- String -->
-        <beds>
-            <bed>1</bed><!-- int -->
-            <bed>1</bed>
-        </beds>
+        <bed>1</bed><!-- int -->
+        <bed>1</bed>
         <price>180</price><!-- int -->
         <season id="summer-2016">
             <seasonstart>2016-07-01</seasonstart><!-- Date -->
@@ -46,9 +42,7 @@
         <id>3</id><!-- int -->
         <floor>0</floor><!-- int -->
         <roomID>R03</roomID><!-- String -->
-        <beds>
-            <bed>2</bed><!-- int -->
-        </beds>
+        <bed>2</bed><!-- int -->
         <price>180</price><!-- int -->
         <season id="summer-2016">
             <seasonstart>2016-07-01</seasonstart><!-- Date -->
@@ -66,11 +60,9 @@
         <id>4</id><!-- int -->
         <floor>0</floor><!-- int -->
         <roomID>R04</roomID><!-- String -->
-        <beds>
-            <bed>2</bed><!-- int -->
-            <bed>1</bed>
-            <bed>1</bed>
-        </beds>
+        <bed>2</bed><!-- int -->
+        <bed>1</bed>
+        <bed>1</bed>
         <price>300</price><!-- int -->
         <season id="summer-2016">
             <seasonstart>2016-07-01</seasonstart><!-- Date -->

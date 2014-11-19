@@ -69,10 +69,10 @@ public class HotelTest {
         end.set(2016, 10, 12);//0-based month
         int nPersons = 2;
         
-        Hotel instance = new Hotel(1, new int[][]{new int[]{2}});
+        Hotel instance = new Hotel("src/testSingleRoom.xml");
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(0, 0, "R0", new int[]{2}));
+        room.add(new Room(1, 0, "R01", new int[]{1,1}));
         QueryResult expQuery = new QueryResult(room, 180*2);
         expResult.add(expQuery);
         
@@ -92,17 +92,17 @@ public class HotelTest {
         end.set(2016, 10, 12);//0-based month
         int nPersons = 3;
         
-        Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        Hotel instance = new Hotel(true);
         
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(3, 0, "R3", new int[]{2,2}));
+        room.add(new Room(4, 0, "R04", new int[]{2,2}));
         QueryResult expQuery = new QueryResult(room, 300*2);
         expResult.add(expQuery);
         
         List<Room> room1 = new ArrayList<>();
-        room1.add(new Room(1, 0, "R1", new int[]{2}));
-        room1.add(new Room(0, 0, "R0", new int[]{1}));
+        room1.add(new Room(2, 0, "R02", new int[]{2}));
+        room1.add(new Room(1, 0, "R01", new int[]{1}));
         QueryResult expQuery2 = new QueryResult(room1, 180*2+120*2);
         expResult.add(expQuery2);
         
@@ -122,19 +122,13 @@ public class HotelTest {
         end.set(2016, 7, 12);//0-based month
         int nPersons = 3;
         
-        Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        Hotel instance = new Hotel(true);
         
         List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(3, 0, "R3", new int[]{2,2}));
-        QueryResult expQuery = new QueryResult(room, (int) (300*2*1.5));
+        room.add(new Room(4, 0, "R04", new int[]{2,2}));
+        QueryResult expQuery = new QueryResult(room, (int) (320*2));
         expResult.add(expQuery);
-        
-        List<Room> room1 = new ArrayList<>();
-        room1.add(new Room(1, 0, "R1", new int[]{2}));
-        room1.add(new Room(0, 0, "R0", new int[]{1}));
-        QueryResult expQuery2 = new QueryResult(room1, (int) (180*2*1.5+120*2*1.5));
-        expResult.add(expQuery2);
         
         List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
         assertEquals(expResult, result);
@@ -194,18 +188,40 @@ public class HotelTest {
         
         int nPersons = 3;
         
-        Hotel instance = new Hotel(4, new int[][]{new int[]{1},new int[]{2},new int[]{2},new int[]{2,2}});
+        Hotel instance = new Hotel(true);
         
-        List<QueryResult> expResult = new ArrayList<>();
         List<Room> room = new ArrayList<>();
-        room.add(new Room(3, 0, "R3", new int[]{2,2}));
+        room.add(new Room(4, 0, "R04", new int[]{2,2}));
         QueryResult resQuery = new QueryResult(room, (int) (300*2*1.5));
         instance.reserve(resStart, resEnd, resQuery, person);
         
+        List<QueryResult> expResult = new ArrayList<>();
         List<Room> room1 = new ArrayList<>();
-        room1.add(new Room(1, 0, "R1", new int[]{2}));
-        room1.add(new Room(0, 0, "R0", new int[]{1}));
-        QueryResult expQuery = new QueryResult(room1, (int) (180*2*1.5+120*2*1.5));
+        room1.add(new Room(2, 0, "R02", new int[]{2}));
+        room1.add(new Room(1, 0, "R01", new int[]{1}));
+        QueryResult expQuery = new QueryResult(room1, (int) (180*2+200*2));
+        expResult.add(expQuery);
+        
+        List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testFindCheapestRoomSmallRoomVariant() {
+        System.out.println("testFindCheapestRoomSmallRoomVariant");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        start.set(2016, 10, 10);//0-based month
+        end.set(2016, 10, 12);//0-based month
+        int nPersons = 3;
+        
+        Hotel instance = new Hotel("src/testSmallRooms.xml");
+        List<QueryResult> expResult = new ArrayList<>();
+        List<Room> room = new ArrayList<>();
+        room.add(new Room(3, 0, "R03", new int[]{1}));
+        room.add(new Room(4, 0, "R04", new int[]{1}));
+        room.add(new Room(5, 0, "R05", new int[]{1}));
+        QueryResult expQuery = new QueryResult(room, 50*2*3);
         expResult.add(expQuery);
         
         List<QueryResult> result = instance.findFreeRooms(start, end, nPersons);

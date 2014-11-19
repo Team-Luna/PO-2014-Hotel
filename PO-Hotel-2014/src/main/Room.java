@@ -122,14 +122,7 @@ public class Room implements Comparable {
             if (!temp.getRoomID().equals(getRoomID())) {
                 return false;
             }
-            boolean check = true;
-            int[] tempB = temp.getBeds();
-            for (int i = 0; i < beds.length; i++) {
-                if (beds[i] != tempB[i]) {
-                    check = false;
-                }
-            }
-            return check;
+            return true;
         }
     }
 

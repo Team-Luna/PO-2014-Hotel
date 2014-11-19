@@ -46,9 +46,9 @@ public class ConfigReaderTest {
     public void testLoadRooms() {
         System.out.println("loadRooms");
         List<Room> expResult = null;
-        ConfigReader reader = new ConfigReader();
+        XMLReader reader = new XMLReader();
         List<Room> result = reader.loadRooms();
-        System.out.println(result); 
+        expResult = reader.loadRooms();
         assertEquals(expResult, result);
     }
     
