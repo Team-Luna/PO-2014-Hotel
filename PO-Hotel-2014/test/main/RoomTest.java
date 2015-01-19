@@ -5,6 +5,8 @@
  */
 package main;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,22 +19,22 @@ import static org.junit.Assert.*;
  * @author K O M P U T E R
  */
 public class RoomTest {
-    
+
     public RoomTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -44,11 +46,9 @@ public class RoomTest {
     public void testGetFloor() {
         System.out.println("getFloor");
         Room instance = new Room();
-        int expResult = 0;
+        int expResult = -1;
         int result = instance.getFloor();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -60,8 +60,7 @@ public class RoomTest {
         int floor = 0;
         Room instance = new Room();
         instance.setFloor(floor);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getFloor(), floor);
     }
 
     /**
@@ -71,11 +70,9 @@ public class RoomTest {
     public void testGetID() {
         System.out.println("getID");
         Room instance = new Room();
-        int expResult = 0;
+        int expResult = -1;
         int result = instance.getID();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -87,8 +84,7 @@ public class RoomTest {
         int ID = 0;
         Room instance = new Room();
         instance.setID(ID);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getID(), ID);
     }
 
     /**
@@ -101,8 +97,6 @@ public class RoomTest {
         int[] expResult = null;
         int[] result = instance.getBeds();
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -114,8 +108,6 @@ public class RoomTest {
         int[] beds = null;
         Room instance = new Room();
         instance.setBeds(beds);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -128,8 +120,6 @@ public class RoomTest {
         String expResult = "";
         String result = instance.getRoomID();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -141,8 +131,61 @@ public class RoomTest {
         String roomID = "";
         Room instance = new Room();
         instance.setRoomID(roomID);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-    
+
+    @Test
+    public void testRoom2() {
+        Hotel hotel = new Hotel("src/user.xml");
+        Room room = hotel.room("2");
+
+        assertNotNull(room);
+        assertEquals(80,
+                room.price(
+                        new GregorianCalendar(2015, Calendar.JANUARY, 15)
+                )
+        );
+        assertEquals(100,
+                room.price(
+                        new GregorianCalendar(2014, Calendar.DECEMBER, 26)
+                )
+        );
+        assertEquals(90,
+                room.price(
+                        new GregorianCalendar(2014, Calendar.DECEMBER, 28)
+                )
+        );
+
+    }
+
+    @Test
+    public void testRoom5() {
+        Hotel hotel = new Hotel("src/user.xml");
+        Room room = hotel.room("5");
+
+        assertEquals(220,
+                room.price(
+                        new GregorianCalendar(2014, Calendar.DECEMBER, 26)
+                )
+        );
+
+        assertEquals(300,
+                room.price(
+                        new GregorianCalendar(2014, Calendar.DECEMBER, 27)
+                )
+        );
+
+        assertEquals(200,
+                room.price(
+                        new GregorianCalendar(2014, Calendar.DECEMBER, 28)
+                )
+        );
+
+        assertEquals(160,
+                room.price(
+                        new GregorianCalendar(2015, Calendar.JANUARY, 7)
+                )
+        );
+
+    }
+
 }

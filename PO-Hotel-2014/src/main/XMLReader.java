@@ -31,7 +31,7 @@ public class XMLReader {
 
     public XMLReader() {
         try {
-            fXmlFile = new File("src/user.xml");
+            fXmlFile = new File("src/full.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             doc = dBuilder.parse(fXmlFile);

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hotel>
+    <!-- ############################################## -->
+    <room>
+        <id>1</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R01</roomID><!-- String -->
+        <bed>1</bed><!-- int -->
+        <price>120</price><!-- int -->
+        <season id="summer-2016">
+            <seasonstart>2016-07-01</seasonstart><!-- Date -->
+            <seasonend>2016-09-01</seasonend><!-- Date -->
+            <price>180</price><!-- int -->
+        </season>
+        <season id="winter-2016">
+            <seasonstart>2016-12-01</seasonstart><!-- Date -->
+            <seasonend>2017-03-01</seasonend><!-- Date -->
+            <price>180</price><!-- int -->
+        </season>
+    </room>
+    <!-- ############################################## -->
+    <room>
+        <id>2</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R02</roomID><!-- String -->
+        <bed>1</bed><!-- int -->
+        <bed>1</bed>
+        <price>180</price><!-- int -->
+        <season id="summer-2016">
+            <seasonstart>2016-07-01</seasonstart><!-- Date -->
+            <seasonend>2016-09-01</seasonend><!-- Date -->
+            <price>200</price><!-- int -->
+        </season>
+        <season id="winter-2016">
+            <seasonstart>2016-12-01</seasonstart><!-- Date -->
+            <seasonend>2017-03-01</seasonend><!-- Date -->
+            <price>200</price><!-- int -->
+        </season>
+    </room>
+    <!-- ############################################## -->
+    <room>
+        <id>3</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R03</roomID><!-- String -->
+        <bed>2</bed><!-- int -->
+        <price>180</price><!-- int -->
+        <season id="summer-2016">
+            <seasonstart>2016-07-01</seasonstart><!-- Date -->
+            <seasonend>2016-09-01</seasonend><!-- Date -->
+            <price>210</price><!-- int -->
+        </season>
+        <season id="winter-2016">
+            <seasonstart>2016-12-01</seasonstart><!-- Date -->
+            <seasonend>2017-03-01</seasonend><!-- Date -->
+            <price>200</price><!-- int -->
+        </season>
+    </room>
+    <!-- ############################################## -->
+    <room>
+        <id>4</id><!-- int -->
+        <floor>0</floor><!-- int -->
+        <roomID>R04</roomID><!-- String -->
+        <bed>2</bed><!-- int -->
+        <bed>1</bed>
+        <bed>1</bed>
+        <price>300</price><!-- int -->
+        <season id="summer-2016">
+            <seasonstart>2016-07-01</seasonstart><!-- Date -->
+            <seasonend>2016-09-01</seasonend><!-- Date -->
+            <price>320</price><!-- int -->
+        </season>
+        <season id="winter-2016">
+            <seasonstart>2016-12-01</seasonstart><!-- Date -->
+            <seasonend>2017-03-01</seasonend><!-- Date -->
+            <price>320</price><!-- int -->
+        </season>
+    </room>
+    <!-- ############################################## -->
+</hotel>

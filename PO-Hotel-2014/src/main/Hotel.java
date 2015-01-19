@@ -109,6 +109,11 @@ public class Hotel {
                 return room;
             }
         }
+        for (Room room : rooms) {
+            if (room.getID() == Integer.parseInt(roomName)) {
+                return room;
+            }
+        }
         return null;
     }
 
@@ -425,7 +430,7 @@ public class Hotel {
                 finalPrice += getRoomPrice(r, start, end);
             }
         }
-        
+
         if (assignedCapacity < nPersons) {
             return new QueryResult();
         }
